@@ -3,11 +3,11 @@
 \docType{class}
 \name{XGBMetricForOrderedLogit}
 \alias{XGBMetricForOrderedLogit}
-\title{Custom Objective/Evaluate Functions Class}
+\title{Custom Objective/Evaluate Functions Class for XGBoost}
 \description{
-Custom Objective/Evaluate Functions Class
+Custom Objective/Evaluate Functions Class for XGBoost
 
-Custom Objective/Evaluate Functions Class
+Custom Objective/Evaluate Functions Class for XGBoost
 }
 \details{
 R6 Class defining custom Objective/Evaluate for XGBoost
@@ -32,18 +32,18 @@ self$notchdiff_eval is set by set_notchdiff_eval
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{criterions}}{between each labels}
+\item{\code{criterion}}{values between each labels for Ordered Logit Model}
 
-\item{\code{notch}}{width for evaluating hit ratio}
+\item{\code{notchdiff_eval}}{width of notch when evaluating hit ratio}
 }
 \if{html}{\out{</div>}}
 }
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{criterions}}{between each labels}
+\item{\code{criterion}}{values between each labels for Ordered Logit Model}
 
-\item{\code{notch}}{width for evaluating hit ratio}
+\item{\code{notchdiff_eval}}{width of notch when evaluating hit ratio}
 }
 \if{html}{\out{</div>}}
 }
@@ -55,6 +55,7 @@ self$notchdiff_eval is set by set_notchdiff_eval
 \item \href{#method-set_notchdiff_eval}{\code{XGBMetricForOrderedLogit$set_notchdiff_eval()}}
 \item \href{#method-return_notchdiff_eval}{\code{XGBMetricForOrderedLogit$return_notchdiff_eval()}}
 \item \href{#method-pred_class_criterion}{\code{XGBMetricForOrderedLogit$pred_class_criterion()}}
+\item \href{#method-pred_class_maxprob}{\code{XGBMetricForOrderedLogit$pred_class_maxprob()}}
 \item \href{#method-obj_ordered_logit}{\code{XGBMetricForOrderedLogit$obj_ordered_logit()}}
 \item \href{#method-eval_logloss}{\code{XGBMetricForOrderedLogit$eval_logloss()}}
 \item \href{#method-eval_hitratio}{\code{XGBMetricForOrderedLogit$eval_hitratio()}}
@@ -88,14 +89,14 @@ Return Criterions between each labels for Ordered Logit Model
 }
 
 \subsection{Returns}{
-provate$criterion
+criterion set in this class
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-set_notchdiff_eval"></a>}}
 \if{latex}{\out{\hypertarget{method-set_notchdiff_eval}{}}}
 \subsection{Method \code{set_notchdiff_eval()}}{
-Set notch width when evaluate hit ratio by eval_hitratio()
+Set notch width when evaluating hit ratio by eval_hitratio()
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XGBMetricForOrderedLogit$set_notchdiff_eval(x)}\if{html}{\out{</div>}}
 }
@@ -138,7 +139,27 @@ function to predict labels comparing preds and criterions (not maximum probabili
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-integer, predict label
+integer label, if [-Inf, criterion\link{1}) label is 1, else if [criterion\link{1}, criterion\link{2}), label is 2, ...
+}
+}
+\if{html}{\out{<hr>}}
+\if{html}{\out{<a id="method-pred_class_maxprob"></a>}}
+\if{latex}{\out{\hypertarget{method-pred_class_maxprob}{}}}
+\subsection{Method \code{pred_class_maxprob()}}{
+function to predict labels at maximum probability
+\subsection{Usage}{
+\if{html}{\out{<div class="r">}}\preformatted{XGBMetricForOrderedLogit$pred_class_maxprob(preds)}\if{html}{\out{</div>}}
+}
+
+\subsection{Arguments}{
+\if{html}{\out{<div class="arguments">}}
+\describe{
+\item{\code{preds}}{double vector, margin score from xgboost before logistic transformation}
+}
+\if{html}{\out{</div>}}
+}
+\subsection{Returns}{
+integer label at max probability
 }
 }
 \if{html}{\out{<hr>}}

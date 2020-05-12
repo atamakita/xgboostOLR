@@ -1,8 +1,3 @@
-# library(magrittr)
-# library(tidyverse)
-# library(R6)
-# library(xgboost)
-
 #' create custom Objective/Evaluate Class for XGBoost
 #'
 #' @param criterion double vector, criterion for Ordered Logit Model
@@ -16,7 +11,7 @@ createOLRlossClass <- function(criterion, notchdiff = 0L) {
 }
 
 #' R6 Class defining custom Objective/Evaluate for XGBoost
-#' @title Custom Objective/Evaluate Functions Class
+#' @title Custom Objective/Evaluate Functions Class for XGBoost
 #' @docType class
 #' @export
 XGBMetricForOrderedLogit <-
@@ -45,13 +40,13 @@ XGBMetricForOrderedLogit <-
             },
             #' @description
             #' Return Criterions between each labels for Ordered Logit Model
-            #' @return provate$criterion
+            #' @return criterion set in this class
             return_criterion = function() {
               return(private$criterion)
             },
 
             #' @description
-            #' Set notch width when evaluate hit ratio by eval_hitratio()
+            #' Set notch width when evaluating hit ratio by eval_hitratio()
             #' @param x integer, notch width when evaluate hit ratio
             #' @note x = 1 -> hit ratio is calculated by {|act - est| < x} / length(act)
             set_notchdiff_eval = function(x) {
@@ -62,15 +57,38 @@ XGBMetricForOrderedLogit <-
             #' Return notch width
             #' @return private$notchdiff_eval
             return_notchdiff_eval = function() {
-              return(private$otchdiff_eval)
+              return(private$notchdiff_eval)
             },
 
             #' @description
             #' function to predict labels comparing preds and criterions (not maximum probability)
             #' @param preds double vector, margin score from xgboost before logistic transformation
-            #' @return integer, predict label
+            #' @return integer label, if [-Inf, criterion[1]) label is 1, else if [criterion[1], criterion[2]), label is 2, ...
             pred_class_criterion = function(preds) {
-              return(as.integer(cut(x = preds, breaks = private$criterion)))
+              return(as.integer(cut(x = preds,
+                                    breaks = private$criterion,
+                                    right = FALSE,
+                                    include.lowest = TRUE,
+                                    ordered_result = TRUE)))
+            },
+            #' @description
+            #' function to predict labels at maximum probability
+            #' @param preds double vector, margin score from xgboost before logistic transformation
+            #' @return integer label at max probability
+            pred_class_maxprob = function(preds) {
+              lst_probs <- list()
+
+              for(i in 1:(length(private$criterion) - 1)) {
+                f_m1 <- private$calc_cum(x = preds,
+                                         tau = private$criterion[i])
+                f <- private$calc_cum(x = preds,
+                                      tau = private$criterion[i + 1])
+
+                colnm <- paste0("V", i)
+                lst_probs[[colnm]] <- f - f_m1
+              }
+
+              return(max.col(as.data.frame(lst_probs)))
             },
 
             #' @description
@@ -130,16 +148,16 @@ XGBMetricForOrderedLogit <-
             #' @note self$notchdiff_eval is set by set_notchdiff_eval
             eval_hitratio = function(preds, dtrain) {
               act <- as.integer(xgboost::getinfo(dtrain, "label"))
-              est <- self$pred_class_criterion(preds)
+              est <- self$pred_class_maxprob(preds)
 
               return(list(metric = paste0("ratio_in", private$notchdiff_eval, "notch"),
                           value = sum(abs(act - est) <= private$notchdiff_eval) / length(act)))
             }
             ),
           private = list(
-            #' @field criterions between each labels
+            #' @field criterion values between each labels for Ordered Logit Model
             criterion = NULL,
-            #' @field notch width for evaluating hit ratio
+            #' @field notchdiff_eval width of notch when evaluating hit ratio
             notchdiff_eval = 0,
 
             #' @description
@@ -171,7 +189,7 @@ XGBMetricForOrderedLogit <-
 #
 # # class
 # cls <- XGBMetricForOrderedLogit$new()
-# cls$set_criterion(1:3)$set_notchdiff_eval(1)
+# cls$set_criterion(c(2, 4, 6))$set_notchdiff_eval(1)
 #
 # # train
 # watchlist <- list(eval = dtest, train = dtrain)
