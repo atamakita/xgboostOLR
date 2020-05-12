@@ -20,3 +20,9 @@ Please wait a moment.
 ## Example
 
 WIP…
+
+## Remaining Works
+
+  - add Example on README.Rmd  
+  - add example data  
+  - delete unnecessary comment
