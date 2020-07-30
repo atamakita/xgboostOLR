@@ -24,7 +24,7 @@ x is sorted ascending
 
 x = 1 -> hit ratio is calculated by {|act - est| < x} / length(act)
 
-grad, hess were referred to URL below
+grad, hess were referred to URL below.
 https://www.slideshare.net/TakujiTahara/201200229-lt-dsb2019-ordered-logit-model-for-qwk-tawara#23
 
 self$notchdiff_eval is set by set_notchdiff_eval
@@ -32,7 +32,7 @@ self$notchdiff_eval is set by set_notchdiff_eval
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{criterion}}{values between each labels for Ordered Logit Model}
+\item{\code{Criterion}}{values between each labels for Ordered Logit Model}
 
 \item{\code{notchdiff_eval}}{width of notch when evaluating hit ratio}
 }
@@ -41,7 +41,7 @@ self$notchdiff_eval is set by set_notchdiff_eval
 \section{Active bindings}{
 \if{html}{\out{<div class="r6-active-bindings">}}
 \describe{
-\item{\code{criterion}}{values between each labels for Ordered Logit Model}
+\item{\code{Criterion}}{values between each labels for Ordered Logit Model}
 
 \item{\code{notchdiff_eval}}{width of notch when evaluating hit ratio}
 }
@@ -74,7 +74,7 @@ Set Criterions between each labels for Ordered Logit Model
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{double vector}
+\item{\code{x}}{A double vector}
 }
 \if{html}{\out{</div>}}
 }
@@ -83,13 +83,13 @@ Set Criterions between each labels for Ordered Logit Model
 \if{html}{\out{<a id="method-return_criterion"></a>}}
 \if{latex}{\out{\hypertarget{method-return_criterion}{}}}
 \subsection{Method \code{return_criterion()}}{
-Return Criterions between each labels for Ordered Logit Model
+Return criterions between each labels for Ordered Logit Model
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XGBMetricForOrderedLogit$return_criterion()}\if{html}{\out{</div>}}
 }
 
 \subsection{Returns}{
-criterion set in this class
+Criterion set in this class
 }
 }
 \if{html}{\out{<hr>}}
@@ -104,7 +104,7 @@ Set notch width when evaluating hit ratio by eval_hitratio()
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{x}}{integer, notch width when evaluate hit ratio}
+\item{\code{x}}{An integer, notch width when evaluate hit ratio}
 }
 \if{html}{\out{</div>}}
 }
@@ -126,7 +126,7 @@ private$notchdiff_eval
 \if{html}{\out{<a id="method-pred_class_criterion"></a>}}
 \if{latex}{\out{\hypertarget{method-pred_class_criterion}{}}}
 \subsection{Method \code{pred_class_criterion()}}{
-function to predict labels comparing preds and criterions (not maximum probability)
+Function to predict labels comparing preds and criterions (not maximum probability)
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XGBMetricForOrderedLogit$pred_class_criterion(preds)}\if{html}{\out{</div>}}
 }
@@ -134,19 +134,19 @@ function to predict labels comparing preds and criterions (not maximum probabili
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preds}}{double vector, margin score from xgboost before logistic transformation}
+\item{\code{preds}}{A double vector, margin score from xgboost before logistic transformation}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
+Integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
 }
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-pred_class_maxprob"></a>}}
 \if{latex}{\out{\hypertarget{method-pred_class_maxprob}{}}}
 \subsection{Method \code{pred_class_maxprob()}}{
-function to predict labels at maximum probability
+Function to predict labels at maximum probability
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{XGBMetricForOrderedLogit$pred_class_maxprob(preds)}\if{html}{\out{</div>}}
 }
@@ -154,12 +154,12 @@ function to predict labels at maximum probability
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preds}}{double vector, margin score from xgboost before logistic transformation}
+\item{\code{preds}}{A double vector, margin score from xgboost before logistic transformation}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-integer label at max probability
+Integer label at max probability
 }
 }
 \if{html}{\out{<hr>}}
@@ -175,16 +175,16 @@ https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preds, }}{double vector, margin score at t-1}
+\item{\code{preds}}{A double vector, margin score at t-1}
 
-\item{\code{dtrain, }}{xgb.DMatrix created by xgboost::xgb.DMatrix}
+\item{\code{dtrain}}{A xgb.DMatrix created by xgboost::xgb.DMatrix}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-named list(both double vector)
-$grad gradient of loss function
-$hess hessian of loss function
+A named list(both double vector).
+$grad gradient of loss function.
+$hess hessian of loss function.
 }
 }
 \if{html}{\out{<hr>}}
@@ -200,16 +200,16 @@ https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preds, }}{double vector, margin score}
+\item{\code{preds}}{A double vector, margin score}
 
-\item{\code{dtrain, }}{xgb.DMatrix created by xgboost::xgb.DMatrix}
+\item{\code{dtrain}}{A xgb.DMatrix created by xgboost::xgb.DMatrix}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-named list(both double vector)
-$metric name of metric
-$value value of metric
+A named list(both double vector).
+$metric name of metric.
+$value value of metric.
 }
 }
 \if{html}{\out{<hr>}}
@@ -225,16 +225,16 @@ https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{preds, }}{double vector, margin score}
+\item{\code{preds}}{A double vector, margin score}
 
-\item{\code{dtrain, }}{xgb.DMatrix created by xgboost::xgb.DMatrix}
+\item{\code{dtrain}}{A xgb.DMatrix created by xgboost::xgb.DMatrix}
 }
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-named list(both double vector)
-$metric name of metric
-$value value of metric
+A named list(both double vector).
+$metric name of metric.
+$value value of metric.
 }
 }
 \if{html}{\out{<hr>}}

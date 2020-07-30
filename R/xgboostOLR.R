@@ -1,7 +1,7 @@
-#' create custom Objective/Evaluate Class for XGBoost
+#' Create custom Objective/Evaluate Class for XGBoost
 #'
-#' @param criterion double vector, criterion for Ordered Logit Model
-#' @param notchdiff integer, notch width when evaluate hit ratio
+#' @param criterion A double vector, criterion for Ordered Logit Model
+#' @param notchdiff An integer, notch width when evaluate hit ratio
 #' @return XGBMetricForOrderedLogit class
 #' @export
 createOLRlossClass <- function(criterion, notchdiff = 0L) {
@@ -11,6 +11,7 @@ createOLRlossClass <- function(criterion, notchdiff = 0L) {
 }
 
 #' R6 Class defining custom Objective/Evaluate for XGBoost
+#'
 #' @title Custom Objective/Evaluate Functions Class for XGBoost
 #' @docType class
 #' @export
@@ -19,7 +20,8 @@ XGBMetricForOrderedLogit <-
           public = list(
             #' @description
             #' Set Criterions between each labels for Ordered Logit Model
-            #' @param x double vector
+            #'
+            #' @param x A double vector
             #' @note Add -Inf/Inf both side of input x
             #' @note x is sorted ascending
             #'   \code{criterion[1] = -Inf},
@@ -38,32 +40,38 @@ XGBMetricForOrderedLogit <-
               private$criterion <- x
               invisible(self)
             },
+
             #' @description
-            #' Return Criterions between each labels for Ordered Logit Model
-            #' @return criterion set in this class
+            #' Return criterions between each labels for Ordered Logit Model
+            #'
+            #' @return Criterion set in this class
             return_criterion = function() {
               return(private$criterion)
             },
 
             #' @description
             #' Set notch width when evaluating hit ratio by eval_hitratio()
-            #' @param x integer, notch width when evaluate hit ratio
+            #'
+            #' @param x An integer, notch width when evaluate hit ratio
             #' @note x = 1 -> hit ratio is calculated by {|act - est| < x} / length(act)
             set_notchdiff_eval = function(x) {
               private$notchdiff_eval <- x
               invisible(self)
             },
+
             #' @description
             #' Return notch width
+            #'
             #' @return private$notchdiff_eval
             return_notchdiff_eval = function() {
               return(private$notchdiff_eval)
             },
 
             #' @description
-            #' function to predict labels comparing preds and criterions (not maximum probability)
-            #' @param preds double vector, margin score from xgboost before logistic transformation
-            #' @return integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
+            #' Function to predict labels comparing preds and criterions (not maximum probability)
+            #'
+            #' @param preds A double vector, margin score from xgboost before logistic transformation
+            #' @return Integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
             pred_class_criterion = function(preds) {
               return(as.integer(cut(x = preds,
                                     breaks = private$criterion,
@@ -71,10 +79,12 @@ XGBMetricForOrderedLogit <-
                                     include.lowest = TRUE,
                                     ordered_result = TRUE)))
             },
+
             #' @description
-            #' function to predict labels at maximum probability
-            #' @param preds double vector, margin score from xgboost before logistic transformation
-            #' @return integer label at max probability
+            #' Function to predict labels at maximum probability
+            #'
+            #' @param preds A double vector, margin score from xgboost before logistic transformation
+            #' @return Integer label at max probability
             pred_class_maxprob = function(preds) {
               lst_probs <- list()
 
@@ -95,12 +105,12 @@ XGBMetricForOrderedLogit <-
             #' Custom Objective Function of Ordered Logit Model
             #' https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
             #'
-            #' @param preds, double vector, margin score at t-1
-            #' @param dtrain, xgb.DMatrix created by xgboost::xgb.DMatrix
-            #' @return named list(both double vector)
-            #'   $grad gradient of loss function
-            #'   $hess hessian of loss function
-            #' @note grad, hess were referred to URL below
+            #' @param preds A double vector, margin score at t-1
+            #' @param dtrain A xgb.DMatrix created by xgboost::xgb.DMatrix
+            #' @return A named list(both double vector).
+            #'   $grad gradient of loss function.
+            #'   $hess hessian of loss function.
+            #' @note grad, hess were referred to URL below.
             #'   https://www.slideshare.net/TakujiTahara/201200229-lt-dsb2019-ordered-logit-model-for-qwk-tawara#23
             obj_ordered_logit = function(preds, dtrain) {
               labels <- xgboost::getinfo(dtrain, "label")
@@ -119,11 +129,11 @@ XGBMetricForOrderedLogit <-
             #' Custom Evaluate Function of Ordered Logit Model (logloss)
             #' https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
             #'
-            #' @param preds, double vector, margin score
-            #' @param dtrain, xgb.DMatrix created by xgboost::xgb.DMatrix
-            #' @return named list(both double vector)
-            #'   $metric name of metric
-            #'   $value value of metric
+            #' @param preds A double vector, margin score
+            #' @param dtrain A xgb.DMatrix created by xgboost::xgb.DMatrix
+            #' @return A named list(both double vector).
+            #'   $metric name of metric.
+            #'   $value value of metric.
             eval_logloss = function(preds, dtrain) {
               labels <- xgboost::getinfo(dtrain, "label")
 
@@ -140,11 +150,11 @@ XGBMetricForOrderedLogit <-
             #' Custom Evaluate Function of Ordered Logit Model (hit ratio)
             #' https://github.com/dmlc/xgboost/blob/master/R-package/demo/custom_objective.R
             #'
-            #' @param preds, double vector, margin score
-            #' @param dtrain, xgb.DMatrix created by xgboost::xgb.DMatrix
-            #' @return named list(both double vector)
-            #'   $metric name of metric
-            #'   $value value of metric
+            #' @param preds A double vector, margin score
+            #' @param dtrain A xgb.DMatrix created by xgboost::xgb.DMatrix
+            #' @return A named list(both double vector).
+            #'   $metric name of metric.
+            #'   $value value of metric.
             #' @note self$notchdiff_eval is set by set_notchdiff_eval
             eval_hitratio = function(preds, dtrain) {
               act <- as.integer(xgboost::getinfo(dtrain, "label"))
@@ -155,15 +165,17 @@ XGBMetricForOrderedLogit <-
             }
             ),
           private = list(
-            #' @field criterion values between each labels for Ordered Logit Model
+            #' @field Criterion values between each labels for Ordered Logit Model
             criterion = NULL,
+
             #' @field notchdiff_eval width of notch when evaluating hit ratio
             notchdiff_eval = 0,
 
             #' @description
             #' Cumulative function of Logistic distribution
-            #' @param x double vector
-            #' @param tau double vector, criterion of Ordered Logit Model
+            #'
+            #' @param x A double vector
+            #' @param tau dA ouble vector, criterion of Ordered Logit Model
             calc_cum = function(x, tau) {
               return(1 / (1 + exp(x - tau)))
             }

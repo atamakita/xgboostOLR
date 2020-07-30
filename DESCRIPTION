@@ -1,6 +1,6 @@
 Package: xgboostOLR
 Title: Custom Objective/Evaluate Functions for xgboost 
-Version: 0.0.1
+Version: 0.0.2
 Author: Akita Shunsuke
 Maintainer: Akita Shunsuke <decoy@gmail.com>
 Description: Custom Objective/Evaluate Functions for xgboost 

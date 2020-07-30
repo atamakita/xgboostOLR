@@ -2,18 +2,18 @@
 % Please edit documentation in R/xgboostOLR.R
 \name{createOLRlossClass}
 \alias{createOLRlossClass}
-\title{create custom Objective/Evaluate Class for XGBoost}
+\title{Create custom Objective/Evaluate Class for XGBoost}
 \usage{
 createOLRlossClass(criterion, notchdiff = 0L)
 }
 \arguments{
-\item{criterion}{double vector, criterion for Ordered Logit Model}
+\item{criterion}{A double vector, criterion for Ordered Logit Model}
 
-\item{notchdiff}{integer, notch width when evaluate hit ratio}
+\item{notchdiff}{An integer, notch width when evaluate hit ratio}
 }
 \value{
 XGBMetricForOrderedLogit class
 }
 \description{
-create custom Objective/Evaluate Class for XGBoost
+Create custom Objective/Evaluate Class for XGBoost
 }
