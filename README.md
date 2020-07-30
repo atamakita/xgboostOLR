@@ -19,7 +19,9 @@ Please wait a moment.
 
 ## Example
 
-WIP…
+``` r
+library(xgboostOLR)
+```
 
 ## Remaining Works
 

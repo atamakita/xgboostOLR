@@ -16,11 +16,11 @@ R6 Class defining custom Objective/Evaluate for XGBoost
 Add -Inf/Inf both side of input x
 
 x is sorted ascending
-criterion\link{1} = -Inf,
-criterion\link{2} = x\link{1}
+\code{criterion[1] = -Inf},
+\code{criterion[2] = x[1]},
 ...
-criterion\link{nClass} = x\link{nClass - 1}
-criterion\link{nClass + 1} = Inf
+\code{criterion[nClass] = x[nClass - 1]},
+\code{criterion[nClass + 1] = Inf}
 
 x = 1 -> hit ratio is calculated by {|act - est| < x} / length(act)
 
@@ -139,7 +139,7 @@ function to predict labels comparing preds and criterions (not maximum probabili
 \if{html}{\out{</div>}}
 }
 \subsection{Returns}{
-integer label, if [-Inf, criterion\link{1}) label is 1, else if [criterion\link{1}, criterion\link{2}), label is 2, ...
+integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
 }
 }
 \if{html}{\out{<hr>}}

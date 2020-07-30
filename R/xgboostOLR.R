@@ -22,11 +22,11 @@ XGBMetricForOrderedLogit <-
             #' @param x double vector
             #' @note Add -Inf/Inf both side of input x
             #' @note x is sorted ascending
-            #'   criterion[1] = -Inf,
-            #'   criterion[2] = x[1]
+            #'   \code{criterion[1] = -Inf},
+            #'   \code{criterion[2] = x[1]},
             #'   ...
-            #'   criterion[nClass] = x[nClass - 1]
-            #'   criterion[nClass + 1] = Inf
+            #'   \code{criterion[nClass] = x[nClass - 1]},
+            #'   \code{criterion[nClass + 1] = Inf}
             set_criterion = function(x) {
               x <- append(-Inf, sort(x))
               x <- append(x, Inf)
@@ -63,7 +63,7 @@ XGBMetricForOrderedLogit <-
             #' @description
             #' function to predict labels comparing preds and criterions (not maximum probability)
             #' @param preds double vector, margin score from xgboost before logistic transformation
-            #' @return integer label, if [-Inf, criterion[1]) label is 1, else if [criterion[1], criterion[2]), label is 2, ...
+            #' @return integer label, if \code{[-Inf, criterion[1])} label is 1, else if \code{[criterion[1], criterion[2])}, label is 2, ...
             pred_class_criterion = function(preds) {
               return(as.integer(cut(x = preds,
                                     breaks = private$criterion,
