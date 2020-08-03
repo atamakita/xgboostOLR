@@ -11,4 +11,4 @@
 #'
 #' @example
 #' scatter
-NULL
+"scatter"

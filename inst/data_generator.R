@@ -22,10 +22,10 @@ label <- data %$%
                    TRUE ~ 5L)
 
 # create data
-data <- data %>%
+scatter <- data %>%
   dplyr::mutate(no = dplyr::row_number(),
                 cls = label,
                 type = dplyr::if_else(no <= Ntrain, "train", "test")) %>%
   dplyr::select(type, cls, V1, V2)
 
-save(data, file = "./data/scatter.rda")
+save(scatter, file = "./data/scatter.rda")
